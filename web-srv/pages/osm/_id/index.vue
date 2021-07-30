@@ -186,15 +186,13 @@
           >Data Upload in Progress</v-card-title
         >
         <v-card-text>
-        
-
           <v-row class="justify-center">
             <v-progress-circular
               indeterminate
               color="primary"
             ></v-progress-circular>
           </v-row>
-            <v-card-subtitle class="justify-center">
+          <v-card-subtitle class="justify-center">
             Uploading Quest Marker Data to OSM Servers</v-card-subtitle
           >
         </v-card-text>
@@ -205,7 +203,9 @@
       <v-card>
         <v-card-title
           >Submit Marker Data To OSM<v-spacer></v-spacer
-          ><v-btn small color="error" @click="toggleSubmissionDialog()">Close</v-btn>
+          ><v-btn small color="error" @click="toggleSubmissionDialog()"
+            >Close</v-btn
+          >
         </v-card-title>
 
         <v-card-text>
@@ -322,11 +322,11 @@ export default {
     ...mapState({
       map_marker_details: state => state.map_marker_details,
       osmProgress: state => state.osmProgress,
-      osmCurrentEnvironment : state => state.osmIsProduction
+      osmCurrentEnvironment: state => state.osmIsProduction
     })
   },
   methods: {
-    submitOSMPayload() {      
+    submitOSMPayload() {
       let payload = {
         mid: this.osmSubmissionPayload.details.mid,
         lat: this.osmSubmissionPayload.details.location.coordinates.lat,
@@ -336,15 +336,18 @@ export default {
         comment: this.osmSubmissionPayload.comments,
         version: this.osmSubmissionPayload.details.version
       };
-      console.log(this.osmCurrentEnvironment,this.osmProgress);
-      if(this.osmCurrentEnvironment == true){
+      console.log(this.osmCurrentEnvironment, this.osmProgress);
+      if (this.osmCurrentEnvironment == true) {
         console.log("Sending Payload to OSM Production");
         this.$store.dispatch("SUBMIT_PAYLOAD_TO_OSMPROD", payload);
-      }else{
+        this.osmDialog = false;
+        this.$router.push({ path: "/quests/" });
+      } else {
         console.log("Sending Payload to OSM Development");
         this.$store.dispatch("SUBMIT_PAYLOAD_TO_OSMDEV", payload);
+        this.osmDialog = false;
+        this.$router.push({ path: "/quests/" });
       }
-      
     },
     computeDateData(time) {
       let options = {

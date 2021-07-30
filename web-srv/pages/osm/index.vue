@@ -72,7 +72,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   layout: "default",
   middleware: "auth",
-  mounted() {
+  created() {
     this.$store.dispatch("GET_VERIFIED_MAP_MARKERS");
   },
   
