@@ -1,0 +1,75 @@
+version: '3.4'
+services: 
+    apidocs: 
+        build:
+            context: ./api-docs
+            dockerfile: Dockerfile
+        ports: 
+            - 8084:8899
+
+    mapping-api:
+        build: 
+            context: ./map-srv
+            dockerfile: Dockerfile
+        ports:
+            - 8083:8899
+        environment: 
+            - INJECT_OSM_DEV_USER='chibbyha52@gmail.com'
+            - INJECT_OSM_DEV_PASS='w93N\spg~zIP'
+            - INJECT_OSM_PROD_USER='chibbyha52@gmail.com'
+            - INJECT_OSM_PROD_PASS='w93N\spg~zIP'
+            - INJECT_ATLAS_USER_PROD='uzhmp-user'
+            - INJECT_ATLAS_PASS_PROD=awtzGBTepiBIaX04'
+            - INJECT_ATLAS_CLUSTER_PROD='uzh-mp.nad1m.mongodb.net'
+            - INJECT_ATLAS_DB_PROD='QuestDB'
+
+    image-api:
+        build:
+            context: ./img-srv
+            dockerfile: Dockerfile
+        ports:
+            - 8082:8899
+        environment: 
+            - INJECT_GCS_BUCKET='uzh-gcs-mp'
+            - INJECT_GCS_PROJECT='mastersproject-305200'
+            - INJECT_GCLOUD_CLIENT_EMAIL='mp-uz-bkadm@mastersproject-305200.iam.gserviceaccount.com'
+            - INJECT_GCLOUD_PRIVATE_KEY='-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDEVl8dQqKXoFXr\noCHubMryZrsDEgH1EdvE2LlfCPJnF8wJoneVTUe6oq5YfPCaKOLe8iHLrpJyWS05\nrDIAqb796eJg47dHXTL7NeFqfGzlzH0lrdS91OBYfsxU46OV5504Wr47aXR6J72n\nQ1EkELJCeH6PLV0TnbnWKz0O3ndG5R9v8zHK4aJWrOWf62f1etqcpcvA+wUjo//4\n0Z0QZ8vgFiO5MmGZJtsrS1vmMCsowJA3YzHGfl8OcUkI54LINMQtTgAQIlCeHEWT\nnhx2R+gKu8JQTgs5GJcIDOfEtKZMcDDR6s25gZBQpnvDZEMouU09taeOO6b0vyds\ncSd6TMpBAgMBAAECggEACGqAZL9yu0eo7zL7yV3Z/DaJnSnUMiZcEo3MsmVuiJtF\nSINxl1GK+dXX3dyrLpyCjxZ3euTmi6bFcMOwGAWutXElXkxckp9M3GZUnY0sWNRh\nZ/BR3npFzJ1Q0nG4lSgqvdvr7B2K2+Kgt08EJyTdE0rZd/c0lm7sJKFRWnYQTFZa\nM3eiPrb4sMwMcFNyw0TwV1akdxGVlATGxfubK1SRNOCeDVvIr8CyiZMsTZyKbKMu\nXDZgIzljDaVxVQGi6MMVz8BIsEdh44RtwnYDfR1MRge4e5nJCMsqxnb8TGCjhuHw\nkzw5mD4PRUelzzdrcZr/hdVva+K7Ee4h0r0XotE7XQKBgQDxFtrrwXTb9YvNdz6T\n9u/ecAkwN2IrjJbif2J2sGRbwb39ng9Onn/XnJrFoxEIWR0PdoXTLEVzvFrTBRQO\nDiPANpw5K0l0+s6y6PHkvdPxDu69Q2E53LBTrohDRqtUFjj8gkiPM1rBXYPD9rKK\nf9cS6fN8AQrQ5DdBl0pnGZakdQKBgQDQeva4JGyrbUAOZZqpsPmakv65aHe8CFYD\naTl2QQ3YjkPVddi7laAVpOfd7kvO1/edJjj9OTzVz8DB7capBT9HXgwRKDq8hukg\nCc7ISFzfyNacFn3nP0YPqxlciW7eYwIDMz4zoyOMpXTz0cbHq7DwXqbsKnaHriPo\nZV5OHLJlHQKBgHPYWpt8Gu3yoBm7mbs5pesJhLDBfA+W/42YTjTf72lTwDpUr+BE\nMwPkwU4EXBPZ1ifu+MEO/dRuBmptf0R9sNoUo56o2SQ3vAil/E3AlU24sikJbneC\nPswHCnzhQUQnZXyYEcuVjp9pkv4f1YzNfwgcmJ3WVl8nuhFvZBYEaqldAoGAaGkM\n4xAq9HfUmuE74jxl5Yo01DqDrMIoAbFTO+w8uPYW9vL8RoYbFHvwO++6O69hrWyV\nIgzmcNaJXRZuZfvgwydQt88EC6MtYgRHcXr8OH9nK+j/yS6hMfuoyfVydyHywhOJ\n1WagyTGcLvgiq6FLDjb5NlHV5wHJrfwGjOxGU+kCgYAr4+ikp9dQ7vIwjJL4rUKS\nhJ9oH66SNmiDafnnSckZOr5P9Myv80jCsrNtLa7PRBytXT51vq/j99myWZlZw6wO\nt6cRXG+CvPp5CNdGmCBfGncFM3jnoo51UbrCBBEp7GVd6/DjXu92SnfH/rH8WG6e\nLEflU2tpGD/3RQiXk2pv/w==\n-----END PRIVATE KEY-----\n'
+            - INJECT_ATLAS_USER_PROD='uzhmp-user'
+            - INJECT_ATLAS_PASS_PROD='awtzGBTepiBIaX04'
+            - INJECT_ATLAS_CLUSTER_PROD='uzh-mp.nad1m.mongodb.net'
+            - INJECT_ATLAS_DB_PROD='ImageDB'
+    
+    api-gateway:
+        build:
+            context: ./api-gateway
+            dockerfile: Dockerfile
+        environment: 
+            - INJECT_APIBASE_URL='http://localhost:8081'
+            - INJECT_TIME_TO_EXPIRE='5h'
+            - INJECT_ATLAS_USER_PROD='uzhmp-user'
+            - INJECT_ATLAS_PASS_PROD='awtzGBTepiBIaX04'
+            - INJECT_ATLAS_CLUSTER_PROD='uzh-mp.nad1m.mongodb.net'
+            - INJECT_ATLAS_DB_PROD='UserDB'
+            - INJECT_MAP_SRV_API='http://localhost:8083'
+            - INJECT_IMG_SRV_API='http://localhost:8082'
+        ports:
+            - 8081:8899
+        depends_on: 
+            - image-api
+            - mapping-api
+    
+    web-ui:
+        build:
+            context: ./web-srv
+            dockerfile: Dockerfile
+        ports:
+            - 8080:8899
+        depends_on:
+            - api-gateway
+            - image-api
+            - mapping-api
+            - apidocs
+        environment:
+            - INJECT_GATEWAY_BASE_URL='http://localhost:8081'
+            - INJECT_GATEWAY_LOGIN_URL='http://localhost:8081/api/v2/login'
+            - INJECT_GATEWAY_PROFILE_URL='http://localhost:8081/api/v2/user/profile'

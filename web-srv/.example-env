@@ -1,0 +1,9 @@
+#Environment Setup
+NODE_ENV=dev
+NUXT_PORT=8899 
+APP_VERSION=1.0.0.0
+
+HOME_PAGE_TITLE=MastersProject
+
+# LINK for Server Side
+GATEWAY_BASE_URL=

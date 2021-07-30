@@ -1,0 +1,27 @@
+#Service Settings
+NODE_ENV=dev
+NUXT_PORT=8899
+
+#Web Settings
+APP_VERSION=1.0.0.0
+HOME_PAGE_TITLE=Mapping_Service
+APIBASE_URL=
+
+#OSM USER SETTINGS
+OSM_DEV_API=https://master.apis.dev.openstreetmap.org
+OSM_PROD_API=https://api.openstreetmap.org
+OSM_DEV_USER=
+OSM_DEV_PASS=
+OSM_PROD_USER=
+OSM_PROD_PASS=
+
+#Database Settings
+ATLAS_USER_PROD=
+ATLAS_PASS_PROD=
+ATLAS_CLUSTER_PROD=
+ATLAS_DB_PROD=
+
+ATLAS_USER_DEV=
+ATLAS_PASS_DEV=
+ATLAS_CLUSTER_DEV=
+ATLAS_DB_DEV=

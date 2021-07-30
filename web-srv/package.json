@@ -1,0 +1,32 @@
+{
+  "name": "web-ui",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@babel/core": "^7.14.0",
+    "@nuxtjs/auth-next": "^5.0.0-1620457172.0cf714c",
+    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/proxy": "^2.1.0",
+    "@nuxtjs/vuetify": "^1.11.3",
+    "axios": "^0.21.1",
+    "core-js": "^3.9.1",
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "leaflet": "^1.7.1",
+    "lodash": "^4.17.21",
+    "nuxt": "^2.15.3",
+    "nuxt-leaflet": "0.0.25",
+    "overpass-frontend": "^2.4.14",
+    "vue-iframes": "0.0.16",
+    "vue-toastification": "^1.7.11",
+    "vue2-leaflet": "^2.7.0"
+  },
+  "devDependencies": {}
+}

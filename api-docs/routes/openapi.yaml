@@ -1,0 +1,629 @@
+openapi: 3.0.1
+info:
+  title: UZH Masters Project API Documentation
+  description: "The following list of API endpoints connected by the API Gateway to the different Microservices. Click [Try it out] to test the endpoints and edit the Example Value."
+  contact:
+    email: calvinmitchell.ongkingco@uzh.ch
+  version: 1.14.3
+
+# Gateway Link
+servers:
+- url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/
+  description: The gateway link of all endpoint services
+
+# Tags for the endpoint services.
+tags:
+- name: user
+  description: Authorization and Authentication of Users
+- name: image
+  description: "Image Service Endpoints [Require TOKEN active to try endpoints]"
+- name: mapping
+  description: Operations about Mapping Services
+- name: quests
+  description: Operations about Mapping Services
+
+paths:
+# USER ENDPOINTS
+  /v2/login:
+    post:
+      tags:
+      - user
+      summary: Logs user into the system
+      operationId: login
+      requestBody:
+        description: Sample login details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        "200":
+          description: Updated User Last Login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+              example:
+                success: true
+                email: emailtest@email.com
+                role: basic
+                token: Bearer APIKEY
+                expiresIn: 5h
+        "401":
+          description: You Entered The Wrong Password! / Email Record Does Not Exist
+          content:
+            application/json:
+              example:
+                success: false
+                message: Invalid Email or Password
+        "422":
+          description: "ERROR: Please enter Email / Password"
+          content:
+            application/json:
+              example:
+                errors:
+                  email:
+                    message: Please enter Email
+                  password:
+                    message: Please enter Password
+        "500":
+          description: Something Went Wrong...
+      x-swagger-router-controller: User
+  /v2/register:
+    post:
+      tags:
+      - user
+      summary: Register a new User
+      operationId: register
+      requestBody:
+        description: Sample details to register a user. Click "Try it out" to edit
+          the values
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "201":
+          description: Creating New User Profile
+          content:
+            application/json:
+              example:
+                success: "true"
+                user: USER DETAILS
+                message: User Account Successfully Registered
+        "409":
+          description: Account Already Exists!
+          content:
+            application/json:
+              example:
+                message: "[Email] Account Already Exists!"
+      x-swagger-router-controller: User
+  /v2/user/list:
+    get:
+      tags:
+      - user
+      summary: (Admin Access) Shows list of Users
+      description: (Admin Access) Gets the list of all the users
+      operationId: getUsers
+      responses:
+        "200":
+          description: Success
+        "401":
+          description: Unauthorized
+        "404":
+          description: User Record Does Not Exist
+        "500":
+          description: Error in Searching User Profile
+      security:
+      - tokenAuth: []
+      x-swagger-router-controller: User
+  /v2/user/profile:
+    get:
+      tags:
+      - user
+      summary: "Current user details"
+      description: "Current user's details"
+      operationId: "getUserProfileDetails"
+      responses:
+        "200":
+          description: "User details"
+        "403":
+          description: "Unauthorized"
+        "500":
+          description: "Error"
+      security:
+        - tokenAuth: []
+    put:
+      tags:
+      - user
+      summary: "(Admin Access) Update a User Profile - (Will follow up on a different commit)"
+      description: "(Admin Access) Update a User Profile"
+      servers:
+      - url: https://
+      operationId: updateUserProfile
+      responses:
+        "200":
+          description: Successfully Updated Item
+        "404":
+          description: No User Record Found
+        "500":
+          description: Error in Updating User Profile
+      deprecated: true
+      security:
+      - tokenAuth: []
+      x-swagger-router-controller: User
+
+# IMAGE ENDPOINTS
+  /imsrv:
+    get:
+      tags:
+      - image
+      summary: Lists all available uploaded images
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg
+      description: Lists all available images that have been uploaded (Admin sees the rest)
+        and available in the database
+      operationId: getImageList
+      responses:
+        "200":
+          description: (list of images)
+        "403":
+          description: Invalid Token Provided or Token has already Expired.
+        "500":
+          description: Error in Searching Image Lists
+      security:
+      - tokenAuth: []
+      x-swagger-router-controller: Image
+  /imsrv/res/{id}:
+    get:
+      tags:
+      - image
+      summary: Get details of one specific image
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg
+      description: Get details of an image
+      operationId: getImageDetails
+      parameters:
+      - name: id
+        in: path
+        description: ID of image to get details
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: byte
+      responses:
+        "200":
+          description: Successfully Uploaded Image
+        "400":
+          description: No File Uploaded.
+        "403":
+          description: Invalid Token Provided or Token has already Expired.
+      security:
+      - tokenAuth: []
+      x-swagger-router-controller: Image
+  /imsrv/s:
+    post:
+      tags:
+      - image
+      summary: Upload a single image file
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg
+      description: Upload a Single file
+      operationId: fileUploader
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SingleUpload'
+            encoding:
+              file:
+                contentType: "image/png, image/jpeg"
+                style: form
+      responses:
+        "200":
+          description: Successfully Uploaded Image
+        "400":
+          description: No File Uploaded.
+        "403":
+          description: Invalid Token Provided or Token has already Expired.
+      security:
+      - tokenAuth: []
+      x-swagger-router-controller: Image
+  /imsrv/m:
+    post:
+      tags:
+      - image
+      summary: "Upload Multiple Images (Max 5). This version does not accept Multipart Array file upload."
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg
+      description: "Upload Multiple Images in a request (Max 5 per upload)"
+      operationId: "multiUploader"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photos:
+                  items:
+                    format: binary
+                    type: string
+                  type: array
+            # encoding:
+            #   photos:
+            #     contentType: image/png, image/jpeg
+      responses:
+        "200":
+          description: "Successfully Uploaded Images"
+        "400":
+          description: "No File Uploaded."
+        "403":
+          description: "Invalid Token Provided or Token has already Expired."
+      security:
+        - tokenAuth: []
+  /imsrv/res:
+    put:
+      tags:
+      - image
+      summary: Delete an image
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg
+      description: Deletes an image using the ID
+      operationId: deleteImageRecord
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteImage'
+      responses:
+        "202":
+          description: Successfully Deleted Image
+          content:
+            application/json:
+              example:
+                message: Successfully Deleted Image
+        "401":
+          description: Invalid Token Provided or Token has already Expired.
+      security:
+      - tokenAuth: []
+      x-swagger-router-controller: Image
+
+# MAPPING SERVICES ENDPOINTS
+  /list:
+    get:
+      tags:
+      - mapping
+      summary: All Map Markers
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg/msrv
+      description: Get all map markers
+      operationId: getMapMarkers
+      responses:
+        "200":
+          description: Map Marker list
+        "404":
+          description: No Record Found
+        "500":
+          description: "[ERROR] Error in Initializing Connection to Database."
+      x-swagger-router-controller: Mapping
+      security:
+      - tokenAuth: []
+  /marker:
+    post:
+      tags:
+      - mapping
+      summary: Create a map marker
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg/msrv
+      description: Creates a map marker
+      operationId: createMapMarker
+      requestBody:
+        description: Sample details to create a map marker. Click "Try it out" to edit the values
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMapMarker'
+        required: true
+      responses:
+        "200":
+          description: Returns the JSON Created.
+        "500":
+          description: "[ERROR] Error in Inserting Mapping Details to Database. error"
+      x-swagger-router-controller: Mapping
+      security:
+      - tokenAuth: []
+    put:
+      tags:
+      - mapping
+      summary: Update map marker. [WEB APP]
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg/msrv
+      description: Updates a map marker
+      operationId: updateMapMarker
+      requestBody:
+        description: Update a map marker
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMapMarker'
+        required: true
+      responses:
+        "200":
+          description: Successfully Updated Marker Details.
+        "404":
+          description: No Record Found Matching Map ID.
+        "500":
+          description: Error saving record
+      security:
+      - tokenAuth: []
+      x-swagger-router-controller: Mapping
+  /marker/{id}:
+    get:
+      tags:
+      - mapping
+      summary: Get details of map marker
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg/msrv
+      description: Get details of map marker
+      operationId: getMapMarkerDetails
+      parameters:
+      - name: id
+        in: path
+        description: ID of map marker to get details
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: byte
+      responses:
+        "200":
+          description: "[SUCCESS] Sucessfully Returning Map Details of (marker)"
+        "404":
+          description: No Marker Record Found
+        "500":
+          description: Error in Initializing Connection to Database.
+      x-swagger-router-controller: Mapping
+      security:
+      - tokenAuth: []
+    delete:
+      tags:
+      - mapping
+      summary: Delete map marker [WEB APP]
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg/msrv
+      description: Deletes a map marker
+      operationId: removeMapMarker
+      parameters:
+      - name: id
+        in: path
+        description: ID of map marker to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: byte
+      responses:
+        "200":
+          description: Successfully Deleted Marker
+        "404":
+          description: No Marker Record Found
+        "500":
+          description: Error in Initializing Connection to Database
+      x-swagger-router-controller: Mapping
+      security:
+      - tokenAuth: []
+  /marker/quest:
+    put:
+      tags:
+      - mapping
+      summary: Verify Quest Markers
+      description: Updates the Existing Quest Marker Record
+      operationId: verifyingQuests
+      requestBody:
+        description: Sample Details of Verifying a Quest Marker, Rename the mid to markerid. Click "Try it out" to edit the values
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyingQuests'
+        required: true
+      parameters:
+      - name: id
+        in: path
+        description: MID of map marker to Verify Quest
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: byte
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg/msrv
+      responses:
+        "200":
+          description: Successfully Created New Quest
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Mapping
+      security:
+      - tokenAuth: []
+  /open/markers:
+    get:
+      tags:
+      - mapping
+      summary: Get All Unverified Quests
+      description: A function to request all open or unverified quests.
+      operationId: getUnverifiedQuests
+      servers:
+      - url: https://uzhmp-api-gateway-77xdzfzvua-ew.a.run.app/api/v1/apg/msrv
+      responses:
+        "200":
+          description: Returns Unverified Quest Marker JSON
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Mapping
+      security:
+      - tokenAuth: []
+
+ 
+# -------------------------------------------------------------
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Please enter your Email
+          format: email
+          example: firstlast@email.com
+        password:
+          type: string
+          description: Please enter a Password (default hidden)
+          format: password
+          example: "12345678"
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        uname:
+          type: string
+          description: Please enter a Username
+        fname:
+          type: string
+          description: Please enter your Given Name
+        lname:
+          type: string
+          description: Please enter your Last Name
+        email:
+          type: string
+          description: Please enter your Email
+          format: email
+        password:
+          type: string
+          description: Please enter a Password (default hidden)
+          format: password
+      additionalProperties: false
+    SingleUpload:
+      additionalProperties: false
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+    DeleteImage:
+      type: object
+      properties:
+        imageid:
+          type: string
+          description: The ID of the image
+          example: PASTE THE ID HERE
+      additionalProperties: false
+    CreateMapMarker:
+      type: object
+      additionalProperties: false
+      properties:
+        geo_type:
+          type: string
+          description: Location type marker
+          enum:
+          - point
+          - polygon
+          - node
+          - way
+          - relation
+        lat:
+          type: integer
+          description: Latitude
+        long:
+          type: integer
+          description: Longitude
+        nodeid:
+          type: string
+          description: OSM Node ID
+        version:
+          type: integer
+          description: Current version of the node
+        title:
+          type: string
+          description: Title of Quest
+        subtitle:
+          type: string
+          description: Subtitle of the Quest
+        description:
+          type: string
+          description: Description of the Quest 
+        comments:
+          type: string
+          description: Comment to be passed to OSM
+        tags:
+          type: array
+          items:
+            type: string
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+          example: [{ "k":"Tag Name","v":"Tag Value" },{ "k":"Tag Name","v":"Tag Value" }]
+        image_url:
+          type: array
+          items:
+            type: string
+            properties:
+              image_url:
+                type: string
+          example: ["some url","another url"]
+      
+          
+    UpdateMapMarker:
+      type: object
+      additionalProperties: false
+      properties:
+        markerid:
+          type: string
+          description: The map marker's ID
+        loc_type:
+          type: string
+          description: Location type marker
+          enum:
+          - point
+          - polygon
+        lat:
+          type: integer
+          description: Latitude
+        long:
+          type: integer
+          description: Longitude
+        title:
+          type: string
+          description: Please Add a valid Location Title
+        subtitle:
+          type: string
+          description: Please Add a valid subtitle 
+        description:
+          type: string
+          description: Please Add a description
+    VerifyingQuests:
+      type: object
+      properties:
+        markerid:
+          type: string
+          description: Verify Quest
+        description:
+          type: string
+          description: Add User Comment
+        image_url:
+          type: string
+          description: Image URL        
+      additionalProperties: false
+  securitySchemes:
+    tokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
