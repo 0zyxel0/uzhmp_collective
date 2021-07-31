@@ -19,8 +19,6 @@ tags:
   description: "Image Service Endpoints [Require TOKEN active to try endpoints]"
 - name: mapping
   description: Operations about Mapping Services
-- name: quests
-  description: Operations about Mapping Services
 
 paths:
 # USER ENDPOINTS
@@ -135,25 +133,6 @@ paths:
           description: "Error"
       security:
         - tokenAuth: []
-    put:
-      tags:
-      - user
-      summary: "(Admin Access) Update a User Profile - (Will follow up on a different commit)"
-      description: "(Admin Access) Update a User Profile"
-      servers:
-      - url: https://
-      operationId: updateUserProfile
-      responses:
-        "200":
-          description: Successfully Updated Item
-        "404":
-          description: No User Record Found
-        "500":
-          description: Error in Updating User Profile
-      deprecated: true
-      security:
-      - tokenAuth: []
-      x-swagger-router-controller: User
 
 # IMAGE ENDPOINTS
   /imsrv:
