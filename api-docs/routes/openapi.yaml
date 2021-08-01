@@ -133,7 +133,23 @@ paths:
           description: "Error"
       security:
         - tokenAuth: []
-
+  /v2/make/me/the/admin:
+    get:
+      tags:
+      - user
+      summary: "Change the Role of the User to Admin Role"
+      description: "Change the Role of the User to Admin Role"
+      operationId: "makeMeTheAdmin"
+      responses:
+        "200":
+          description: "Update the Role of the User"
+        "403":
+          description: "Unauthorized"
+        "500":
+          description: "Error"
+      security:
+        - tokenAuth: []
+  
 # IMAGE ENDPOINTS
   /imsrv:
     get:
