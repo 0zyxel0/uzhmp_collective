@@ -8,10 +8,11 @@ WORKDIR /usr/src/app
 # Assign ENV variables
 # Bind the App to any IP
 ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=8899
 # Provides the Build URL for NUXT BUILD
-ENV GATEWAY_BASE_URL="http://localhost:8081"
-ENV GATEWAY_LOGIN_URL="http://localhost:8081/api/v2/login"
-ENV GATEWAY_PROFILE_URL="http://localhost:8081/api/v2/user/profile"
+ENV GATEWAY_BASE_URL="http://172.1.6.3:8899"
+ENV GATEWAY_LOGIN_URL="http://172.1.6.3:8899/api/v2/login"
+ENV GATEWAY_PROFILE_URL="http://172.1.6.3:8899/api/v2/user/profile"
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure both package.json AND package-lock.json are copied.
