@@ -51,7 +51,7 @@ export default {
           // these are the API endpoints we created in Express
           login: {
             url:
-              process.env.GATEWAY_LOGIN_URL,
+              process.env.GATEWAY_LOGIN_URL || `http://localhost:8081/api/v2/login`,
             method: "post",
             propertyName: "token"
           },
@@ -59,7 +59,7 @@ export default {
           // User Profile Will be automatically be fetched when user login
           user: {
             url:
-              process.env.GATEWAY_PROFILE_URL,
+              process.env.GATEWAY_PROFILE_URL || `http://localhost:8081/api/v2/user/profile`,
             method: "get",
             propertyName: "user"
           }
@@ -80,7 +80,7 @@ export default {
   // Adding a AXIOS PATH DEFAULT
   axios: {
     baseURL:
-      process.env.GATEWAY_BASE_URL,
+      process.env.GATEWAY_BASE_URL || `http://localhost:8081`,
     proxyHeaders: false,
     credentials: false
   },

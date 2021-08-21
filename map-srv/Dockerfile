@@ -14,16 +14,16 @@ ENV NODE_ENV=prod
 #OSM USER SETTINGS
 ENV OSM_DEV_API="https://master.apis.dev.openstreetmap.org"
 ENV OSM_PROD_API="https://api.openstreetmap.org"
-ENV OSM_DEV_USER=${INJECT_OSM_DEV_USER}
-ENV OSM_DEV_PASS=${INJECT_OSM_DEV_PASS}
-ENV OSM_PROD_USER=${INJECT_OSM_PROD_USER}
-ENV OSM_PROD_PASS=${INJECT_OSM_PROD_PASS}
+ENV OSM_DEV_USER="chibbyha52@gmail.com"
+ENV OSM_DEV_PASS="w93N\spg~zIP"
+ENV OSM_PROD_USER="chibbyha52@gmail.com"
+ENV OSM_PROD_PASS="w93N\spg~zIP"
 
 #Database Settings
-ENV ATLAS_USER_PROD=${INJECT_ATLAS_USER_PROD}
-ENV ATLAS_PASS_PROD=${INJECT_ATLAS_PASS_PROD}
-ENV ATLAS_CLUSTER_PROD=${INJECT_ATLAS_CLUSTER_PROD}
-ENV ATLAS_DB_PROD=${INJECT_ATLAS_DB_PROD}
+ENV ATLAS_USER_PROD="uzhmp-user"
+ENV ATLAS_PASS_PROD="awtzGBTepiBIaX04"
+ENV ATLAS_CLUSTER_PROD="uzh-mp.nad1m.mongodb.net"
+ENV ATLAS_DB_PROD="QuestDB"
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure both package.json AND package-lock.json are copied.
